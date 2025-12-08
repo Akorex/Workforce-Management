@@ -13,7 +13,7 @@ export class Department {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @OneToMany(() => Employee, (employee) => employee.department)

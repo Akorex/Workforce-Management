@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/filters/http-exception-filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +15,20 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.connectMicroservice({
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RABBITMQ_URL || 'amqp://user:password@localhost:5672'],
+      queue: 'leave_queue',
+      noAck: false,
+      queueOptions: {
+        durable: true,
+      },
+    },
+  });
+
+  await app.startAllMicroservices();
 
   app.setGlobalPrefix('api/v1');
 

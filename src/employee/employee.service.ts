@@ -39,7 +39,8 @@ export class EmployeeService {
       data,
       meta: {
         total,
-        page,
+        itemCount: data.length,
+        currentPage: page,
         lastPage: Math.ceil(total / limit),
       },
     };

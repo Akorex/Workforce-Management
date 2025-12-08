@@ -4,7 +4,12 @@ export class CreateEmployeeDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(2)
-  name: string;
+  firstName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(2)
+  lastName: string;
 
   @IsEmail()
   @IsNotEmpty()

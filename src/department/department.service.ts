@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { DepartmentRepository } from './department.repository';
 import { CreateDepartmentDto } from './dto/createDepartment';
 import { Department } from './department.model';
@@ -10,13 +14,17 @@ export class DepartmentService {
   async create(dto: CreateDepartmentDto): Promise<Department> {
     const existing = await this.departmentsRepo.findOneByName(dto.name);
     if (existing) {
-      throw new Error('Department already exists');
+      throw new ConflictException('Department already exists');
     }
     return this.departmentsRepo.create(dto);
   }
 
-  async findOne(id: string): Promise<Department | null> {
-    return this.departmentsRepo.findOneById(id);
+  async findOne(id: string): Promise<Department> {
+    const department = await this.departmentsRepo.findOneById(id);
+    if (!department) {
+      throw new NotFoundException(`Department with ID ${id} not found`);
+    }
+    return department;
   }
 
   async findAll(): Promise<Department[]> {

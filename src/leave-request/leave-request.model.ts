@@ -16,12 +16,12 @@ import {
 
 @Entity()
 export class LeaveRequest {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   @Index()
-  employeeId: number;
+  employeeId: string;
 
   @Column({ type: 'date' })
   startDate: Date;
