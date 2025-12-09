@@ -13,6 +13,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
 
   catch(exception: unknown, host: ArgumentsHost) {
+    if (host.getType() !== 'http') {
+      this.logger.error(
+        `[RPC Error] ${exception instanceof Error ? exception.message : exception}`,
+      );
+      return; // Let the Microservice handler deal with it (or standard logging)
+    }
+
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();

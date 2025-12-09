@@ -32,6 +32,7 @@ export class LeaveRequestController {
   // Consumer endpoint
   @EventPattern('leave.requested')
   async handleLeaveRequested(@Payload() data: any, @Ctx() context: RmqContext) {
+    console.log('WORKER RECEIVED MESSAGE:', data);
     const channel = context.getChannelRef();
     const originalMsg = context.getMessage();
 

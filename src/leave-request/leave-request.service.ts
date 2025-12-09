@@ -5,6 +5,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { RABBITMQ_SERVICE } from 'src/common/constants';
 import { Logger } from '@nestjs/common';
 import { LeaveRequestStatus } from './leave-request.interface';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class LeaveRequestService {
@@ -23,10 +24,13 @@ export class LeaveRequestService {
       new Date(dto.endDate),
     );
 
-    this.rabbitClient.emit('leave.requested', {
-      leaveId: leaveRequest.id,
-      days: days,
-    });
+    console.log('Emitting event');
+    await lastValueFrom(
+      this.rabbitClient.emit('leave.requested', {
+        leaveId: leaveRequest.id,
+        days: days,
+      }),
+    );
 
     this.logger.log(`Leave request ${leaveRequest.id} created successfully`);
 
