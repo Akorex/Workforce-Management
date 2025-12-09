@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/filters/http-exception-filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { Transport } from '@nestjs/microservices';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,6 +30,18 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
+
+  const config = new DocumentBuilder()
+    .setTitle('Workforce Management API')
+    .setDescription(
+      'System for managing employees, departments, and automated leave requests.',
+    )
+    .setVersion('1.0')
+    .addTag('workforce')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
   app.setGlobalPrefix('api/v1');
 

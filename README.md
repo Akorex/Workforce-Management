@@ -60,6 +60,12 @@ The API will be available at: http://localhost:3000/api/v1
 
 #### Departments
 
+### Swagger Documentation:
+
+```bash
+http://localhost:3000/api
+```
+
 1. POST /v1/departments
    Create a new department.
    Body: { "name": "Engineering" }
